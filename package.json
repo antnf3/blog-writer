@@ -1,0 +1,45 @@
+{
+  "name": "@antnf3/blog-writer",
+  "version": "0.0.1",
+  "main": "lib/index.js",
+  "files": [
+    "lib/**/*"
+  ],
+  "types": "lib/index.d.ts",
+  "description": "auto blog write",
+  "author": "antnf3 <antnf3@gmail.com>",
+  "keyword": [
+    "naver",
+    "tistory",
+    "blog",
+    "write",
+    "auto"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/antnf3/blog-writer.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node src/index.ts",
+    "test": "ts-node test.ts",
+    "dev": "ts-node src/test.ts"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^8.2.0",
+    "@types/node": "^13.13.4",
+    "@types/selenium-webdriver": "^4.0.9",
+    "dotenv": "^8.2.0",
+    "ts-node": "^8.9.1",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "chromedriver": "^81.0.0",
+    "clipboardy": "^2.3.0",
+    "selenium-webdriver": "^4.0.0-alpha.7"
+  }
+}
