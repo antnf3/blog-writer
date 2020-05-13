@@ -13,6 +13,7 @@ import {
 import { WebDriver, By, Key, until } from "selenium-webdriver";
 import { getRandom } from ".";
 import { moveLastTab } from "./naverUtils";
+import { log } from "console";
 
 /**
  * 티스토리 로그인하기
@@ -130,29 +131,25 @@ async function switchToFrame(selfDriver: WebDriver, frameIdx: number) {
  */
 async function resolveRecaptcha(selfDriver: WebDriver) {
   const reCaptchaConfirmBtn = `//*[@id="solver-button"]`;
-  const imgBox = `//*[@id="rc-imageselect"]`;
-  const imgBox2 = `//*[@id="editor-root"]/div[9]/div[4]`;
+  const reFrame = `//*[@id="editor-root"]/div[9]`;
 
   await btnClick(selfDriver, reCaptchaConfirmBtn);
   const delaySeconds = getRandom(1000);
-  console.log(delaySeconds);
   await selfDriver.sleep(delaySeconds);
-  const isStillImgBox = (await selfDriver.findElements(By.xpath(imgBox)))
-    .length;
-  const isStillImgBox2 = (await selfDriver.findElements(By.xpath(imgBox2)))
-    .length;
-  if (isStillImgBox > 0 || isStillImgBox2 > 0) {
-    const isDisplay = await (
-      await selfDriver.findElement(By.xpath(imgBox))
-    ).isDisplayed();
 
-    const isDisplay2 = await (
-      await selfDriver.findElement(By.xpath(imgBox2))
+  await switchToDefault(selfDriver);
+  let isDisplay: boolean = false;
+  const isStillReFrame = (await selfDriver.findElements(By.xpath(reFrame)))
+    .length;
+  if (isStillReFrame > 0) {
+    isDisplay = await (
+      await selfDriver.findElement(By.xpath(reFrame))
     ).isDisplayed();
+  }
 
-    if (isDisplay || isDisplay2) {
-      await resolveRecaptcha(selfDriver);
-    }
+  if (isDisplay) {
+    await switchToFrame(selfDriver, 3);
+    await resolveRecaptcha(selfDriver);
   }
 }
 

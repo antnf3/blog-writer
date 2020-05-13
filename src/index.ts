@@ -17,7 +17,7 @@ import "dotenv/config";
 const param = {
   id: `${process.env.TISTORY_ID}`,
   password: `${process.env.TISTORY_PW}`,
-  imgUrl: `C:/Users/antnf/Desktop/saafsf.jpg`,
+  imgUrl: `C:/Users/C14A-080/Desktop/lens-4192777_960_720.jpg`,
   subject: "제목.",
   content: "내용입.",
   selectType: "6",
