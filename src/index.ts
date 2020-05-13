@@ -21,7 +21,7 @@ const param = {
   subject: "제목.",
   content: "내용입.",
   selectType: "6",
-  tags: `#학교, #하교, #등교`,
+  tags: `학교,하교,등교`,
   site: `tistory`,
 };
 writeTistoryPost(param);

@@ -192,6 +192,27 @@ async function logOut(selfDriver: WebDriver) {
 }
 
 /**
+ * default로 변경
+ */
+async function switchToDefault(selfDriver: WebDriver) {
+  await selfDriver.switchTo().defaultContent();
+}
+
+/**
+ * parent 변경
+ */
+async function switchToParent(selfDriver: WebDriver) {
+  await selfDriver.switchTo().parentFrame();
+}
+
+/**
+ * iframe로 변경
+ */
+async function switchToFrame(selfDriver: WebDriver, frameIdx: number) {
+  await selfDriver.switchTo().frame(frameIdx);
+}
+
+/**
  * 내용 입력(미사용)
  */
 async function regContent(selfDriver: WebDriver, elemet: string, val: string) {
@@ -215,4 +236,7 @@ export {
   logOut,
   copyClipBoardBeta,
   keyMove,
+  switchToDefault,
+  switchToParent,
+  switchToFrame,
 };
