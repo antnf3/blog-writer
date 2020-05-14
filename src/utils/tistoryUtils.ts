@@ -1,22 +1,14 @@
-// import "chromedriver";
 import {
   getDrive,
   getLoginPage,
   copyClipBoard,
   btnClick,
-  moveMainFrame,
-  logOut,
-  selectBox,
-  copyClipBoardBeta,
-  keyMove,
   switchToFrame,
   switchToDefault,
   switchToParent,
 } from "./webDriverUtils";
 import { WebDriver, By, Key, until } from "selenium-webdriver";
 import { getRandom } from ".";
-import { moveLastTab } from "./naverUtils";
-import { log } from "console";
 import { write } from "clipboardy";
 
 /**

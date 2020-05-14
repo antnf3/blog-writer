@@ -1,17 +1,9 @@
 // import "chromedriver";
 // import "dotenv/config";
-import {
-  Builder,
-  By,
-  Key,
-  WebDriver,
-  WebElementPromise,
-  WebElement,
-} from "selenium-webdriver";
+import { Builder, By, Key, WebDriver, WebElement } from "selenium-webdriver";
 import * as chrome from "selenium-webdriver/chrome";
 import { write } from "clipboardy";
 import { getRandom } from "../utils";
-import { IKey } from "selenium-webdriver/lib/input";
 
 /**
  * Chrome 옵션 설정

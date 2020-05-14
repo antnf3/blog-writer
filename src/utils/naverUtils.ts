@@ -1,4 +1,3 @@
-// import "chromedriver";
 import {
   getDrive,
   getLoginPage,
