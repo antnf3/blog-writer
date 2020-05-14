@@ -129,7 +129,7 @@ async function btnClick(selfDriver: WebDriver, element: string) {
     await selfDriver.sleep(getRandom());
   } catch (err) {
     console.log(err);
-    // await logOut(selfDriver);
+    await logOut(selfDriver);
     throw "btnClick err";
   }
 }
