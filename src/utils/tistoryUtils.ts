@@ -43,9 +43,9 @@ async function tistoryLogin(id: string, password: string, site: string) {
  * 기본모드 글쓰기 interface
  */
 interface ModeProps {
-  imgUrl: string;
+  imgUrl: string[];
   subject: string;
-  content: string;
+  content: contentProps;
   selectType: string;
   tags: string;
 }
@@ -64,7 +64,7 @@ async function basicMode(
   await selfDriver.switchTo().frame(0);
   await selfDriver.sleep(getRandom());
 
-  await copyClipBoard(selfDriver, ctnt, content);
+  await copyClipBoard(selfDriver, ctnt, `${content.ctnt1 + content.ctnt3}`);
 
   await selfDriver.switchTo().defaultContent();
 }
@@ -94,7 +94,7 @@ async function makrdownMode(
   await btnClick(selfDriver, eleCont); // 내용 클릭
 
   await btnClick(selfDriver, imgFileBtn); // 첨부파일 버튼 클릭
-  await selfDriver.findElement(By.xpath(inputImg)).sendKeys(imgUrl); // 이미지 첨부
+  await selfDriver.findElement(By.xpath(inputImg)).sendKeys(imgUrl[0]); // 이미지 첨부
 
   await selfDriver.sleep(getRandom());
 
@@ -115,7 +115,7 @@ async function makrdownMode(
   await selfDriver.sleep(getRandom());
 
   // 내용 클립보드 복사
-  await write(content);
+  await write(`${content.ctnt1 + content.ctnt3}`);
   // 내용 붙여넣기
   actionId.keyDown(Key.CONTROL).sendKeys("v").keyUp(Key.CONTROL).perform();
 
@@ -164,12 +164,17 @@ async function postingBtnClick(selfDriver: WebDriver, saveBtn: string) {
   await selfDriver.sleep(getRandom());
 }
 
+interface contentProps {
+  ctnt1: string;
+  ctnt2: string;
+  ctnt3: string;
+}
 interface WriteNaverPostProps {
   id: string;
   password: string;
-  imgUrl: string;
+  imgUrl: string[];
   subject: string;
-  content: string;
+  content: contentProps;
   selectType: string;
   tags: string;
   site: string;

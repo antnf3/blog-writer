@@ -120,12 +120,20 @@ async function clickPictureButton(selfDriver: WebDriver, imgUrl: string) {
   return pictureDriver;
 }
 
+/**
+ * 내용 속성
+ */
+interface contentProps {
+  ctnt1: string;
+  ctnt2: string;
+  ctnt3: string;
+}
 interface WriteNaverPostProps {
   id: string;
   password: string;
-  imgUrl: string;
+  imgUrl: string[];
   subject: string;
-  content: string;
+  content: contentProps;
   selectType: string;
   tags: string;
   site: string;
@@ -166,7 +174,7 @@ async function writeNaverPost({
   await copyClipBoard(mainFrame, eleSubject, subject);
 
   // 사진첨부버튼 클릭
-  const pictureDriver = await clickPictureButton(mainFrame, imgUrl);
+  const pictureDriver = await clickPictureButton(mainFrame, imgUrl[0]);
 
   // chrome탭화면 전환
   const lastWindowDriver2 = await moveLastTab(pictureDriver);
@@ -183,7 +191,11 @@ async function writeNaverPost({
   ).getAttribute("value");
 
   // html 내용 입력(이미지등록태그 + 내용)
-  await copyClipBoard(mainFrame2, eleTextarea, `${txtValue} ${content}`);
+  await copyClipBoard(
+    mainFrame2,
+    eleTextarea,
+    `${txtValue} ${content.ctnt1 + content.ctnt3}`
+  );
 
   const eleSubjectCombo = `//*[@id="directoryArea"]/div/div[1]/div[1]`; // 주제분류 콤보
   const eleSubjectType = `//*[@id="seq21"]`; // 상품리뷰
@@ -250,7 +262,7 @@ async function writeNaverPostBeta({
   // 내용부분으로 이동
   await keyMove(mainFrame, Key.ARROW_RIGHT);
   const pictureBtn = `//*[@id="blog-editor"]/div/div[1]/div/header/div[1]/ul/li[1]/button/span[1]`;
-  mainFrame.findElement(By.xpath(pictureBtn)).sendKeys(imgUrl);
+  mainFrame.findElement(By.xpath(pictureBtn)).sendKeys(imgUrl[0]);
   // await btnClick(mainFrame, pictureBtn); //  사진 클릭
   // 내용입력
   // await copyClipBoardBeta(mainFrame, content);
