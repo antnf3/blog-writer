@@ -28,6 +28,13 @@
   resolved "https://registry.yarnpkg.com/@testim/chrome-version/-/chrome-version-1.0.7.tgz#0cd915785ec4190f08a3a6acc9b61fc38fb5f1a9"
   integrity sha512-8UT/J+xqCYfn3fKtOznAibsHpiuDshCb0fwgWxRazTT19Igp9ovoXMPhXyLD6m3CKQGTMHgqoxaFfMWaL40Rnw==
 
+"@types/chromedriver@^81.0.0":
+  version "81.0.0"
+  resolved "https://registry.yarnpkg.com/@types/chromedriver/-/chromedriver-81.0.0.tgz#d7c97bd2b1de34270f44e60f4eee43bfdba3a8e2"
+  integrity sha512-Oqwo24DPn5lYI66aA74ApKrfAqVFEjC66raiB/2eHhhryYiumlMpRTR/++riaRcXmfrLXrIiNTtE+Op4vGCIFQ==
+  dependencies:
+    "@types/node" "*"
+
 "@types/dotenv@^8.2.0":
   version "8.2.0"
   resolved "https://registry.yarnpkg.com/@types/dotenv/-/dotenv-8.2.0.tgz#5cd64710c3c98e82d9d15844375a33bf1b45d053"

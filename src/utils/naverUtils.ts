@@ -120,6 +120,44 @@ async function clickPictureButton(selfDriver: WebDriver, imgUrl: string) {
   return pictureDriver;
 }
 
+async function addMultiImages(
+  selfDriver: WebDriver,
+  imgUrl: string[],
+  { eleHtmlBtn, eleEditorBtn, eleTextarea, eleMainFrame }: any
+) {
+  let arrImgTags = [];
+  let mainFrame2: WebDriver = selfDriver;
+  try {
+    for (let i = 0, len = imgUrl.length; i < len; i++) {
+      // 사진첨부버튼 클릭
+      const pictureDriver = await clickPictureButton(selfDriver, imgUrl[i]);
+
+      // chrome탭화면 전환
+      const lastWindowDriver2 = await moveLastTab(pictureDriver);
+      // iframe 전환
+      mainFrame2 = await moveMainFrame(lastWindowDriver2, eleMainFrame);
+
+      // html 입력창으로 이동
+      await btnClick(mainFrame2, eleHtmlBtn);
+
+      // html 이미지등록 태그 복사
+      await btnClick(mainFrame2, eleTextarea);
+      arrImgTags.push(
+        await (
+          await mainFrame2.findElement(By.xpath(eleTextarea))
+        ).getAttribute("value")
+      );
+      // 클리어
+      await (await mainFrame2.findElement(By.xpath(eleTextarea))).clear();
+
+      // Editor 입력창으로 이동
+      await btnClick(mainFrame2, eleEditorBtn);
+    }
+  } catch (err) {
+    throw "error";
+  }
+  return { mainFrame2, arrImgTags };
+}
 /**
  * 내용 속성
  */
@@ -154,6 +192,7 @@ async function writeNaverPost({
   const eleType = `//*[@id="post.category.categoryNo"]`; // 게시판 종류
   const eleSubject = `//*[@id="subject"]`; // 제목
   const eleHtmlBtn = `//*[@id="smart_editor2_content"]/div[5]/ul/li[2]/button`; // html 입력버튼
+  const eleEditorBtn = `//*[@id="smart_editor2_content"]/div[5]/ul/li[1]/button`; // editor 입력버튼
   const eleTextarea = `//*[@id="smart_editor2_content"]/div[4]/textarea[1]`; // html textarea
   const eleTag = `//*[@id="tagList"]`; // 태그
   const eleSaveBtn = `//*[@id="btn_submit"]/img`; // 발행 버튼
@@ -173,28 +212,41 @@ async function writeNaverPost({
   // 제목 입력
   await copyClipBoard(mainFrame, eleSubject, subject);
 
-  // 사진첨부버튼 클릭
-  const pictureDriver = await clickPictureButton(mainFrame, imgUrl[0]);
+  const { mainFrame2, arrImgTags } = await addMultiImages(mainFrame, imgUrl, {
+    eleHtmlBtn,
+    eleEditorBtn,
+    eleTextarea,
+    eleMainFrame,
+  });
+  // // 사진첨부버튼 클릭
+  // const pictureDriver = await clickPictureButton(mainFrame, imgUrl[0]);
 
-  // chrome탭화면 전환
-  const lastWindowDriver2 = await moveLastTab(pictureDriver);
-  // iframe 전환
-  const mainFrame2 = await moveMainFrame(lastWindowDriver2, eleMainFrame);
+  // // chrome탭화면 전환
+  // const lastWindowDriver2 = await moveLastTab(pictureDriver);
+  // // iframe 전환
+  // const mainFrame2 = await moveMainFrame(lastWindowDriver2, eleMainFrame);
 
   // html 입력창으로 이동
   await btnClick(mainFrame2, eleHtmlBtn);
 
-  // html 이미지등록 태그 복사
-  await btnClick(mainFrame2, eleTextarea);
-  const txtValue = await (
-    await mainFrame2.findElement(By.xpath(eleTextarea))
-  ).getAttribute("value");
+  // // html 이미지등록 태그 복사
+  // await btnClick(mainFrame2, eleTextarea);
+  // const txtValue = await (
+  //   await mainFrame2.findElement(By.xpath(eleTextarea))
+  // ).getAttribute("value");
 
+  const [mainImg, ...othersImg] = arrImgTags;
   // html 내용 입력(이미지등록태그 + 내용)
   await copyClipBoard(
     mainFrame2,
     eleTextarea,
-    `${txtValue} ${content.ctnt1 + content.ctnt3}`
+    `${mainImg} ${
+      content.ctnt1 +
+      content.ctnt2 +
+      othersImg.join("") +
+      ((othersImg.length > 0 && "<p><br></p>") || "") +
+      content.ctnt3
+    }`
   );
 
   const eleSubjectCombo = `//*[@id="directoryArea"]/div/div[1]/div[1]`; // 주제분류 콤보

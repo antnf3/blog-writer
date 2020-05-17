@@ -1,6 +1,6 @@
 {
   "name": "@antnf3/blog-writer",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "lib/index.js",
   "files": [
     "lib/**/*"
@@ -30,6 +30,7 @@
     "dev": "ts-node src/test.ts"
   },
   "devDependencies": {
+    "@types/chromedriver": "^81.0.0",
     "@types/dotenv": "^8.2.0",
     "@types/node": "^13.13.4",
     "@types/selenium-webdriver": "^4.0.9",
