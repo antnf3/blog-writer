@@ -115,7 +115,7 @@ async function clickPictureButton(selfDriver: WebDriver, imgUrl: string) {
   await pictureDriver.sleep(getRandom(2000));
   // 5. 이미지 첨부파일 업로드 버튼 클릭
   await (await pictureDriver.findElement(By.xpath(eleUploadBtn))).click();
-  await pictureDriver.sleep(getRandom(2000));
+  await pictureDriver.sleep(getRandom(5000));
 
   return pictureDriver;
 }
@@ -195,7 +195,7 @@ async function addMultiImages(
       }
       // 5. 이미지 첨부파일 업로드 버튼 클릭
       await (await pictureDriver.findElement(By.xpath(eleUploadBtn))).click();
-      await pictureDriver.sleep(getRandom(2000));
+      await pictureDriver.sleep(getRandom(5000));
 
       // chrome탭화면 전환
       const lastWindowDriver2 = await moveLastTab(pictureDriver);
