@@ -9,6 +9,7 @@ import "dotenv/config";
 //   imgUrl: [
 //     `C:/Users/antnf/Desktop/saafsf.jpg`,
 //     `C:/Users/antnf/Desktop/rocket_logo.png`,
+//     `C:/Users/antnf/Desktop/rocket_logo.png`,
 //   ],
 //   subject: "제목입니다.",
 //   content: { ctnt1: "내용1", ctnt2: "내용2", ctnt3: "내용3" },

@@ -120,6 +120,22 @@ async function clickPictureButton(selfDriver: WebDriver, imgUrl: string) {
   return pictureDriver;
 }
 
+/**
+ * 멀티사진첨부버튼 클릭
+ * @param selfDriver
+ * @param imgUrl
+ */
+async function clickPictureMultiButton(selfDriver: WebDriver, imgUrl: string) {
+  const eleImgFileTag = `//*[@id="pc_image_file"]`; // 이미지 파일 업로드 태그
+  // 4. 이미지 첨부파일 선택
+  await (await selfDriver.findElement(By.xpath(eleImgFileTag))).clear();
+  await selfDriver.findElement(By.xpath(eleImgFileTag)).sendKeys(imgUrl);
+  await selfDriver.sleep(getRandom(2000));
+}
+
+/**
+ *
+ */
 async function addMultiImages(
   selfDriver: WebDriver,
   imgUrl: string[],
@@ -128,9 +144,58 @@ async function addMultiImages(
   let arrImgTags = [];
   let mainFrame2: WebDriver = selfDriver;
   try {
-    for (let i = 0, len = imgUrl.length; i < len; i++) {
-      // 사진첨부버튼 클릭
-      const pictureDriver = await clickPictureButton(selfDriver, imgUrl[i]);
+    for (let i = 0, len = 1; i < len; i++) {
+      if (i === 0) {
+        // 사진첨부버튼 클릭
+        const pictureDriver = await clickPictureButton(selfDriver, imgUrl[i]);
+
+        // chrome탭화면 전환
+        const lastWindowDriver2 = await moveLastTab(pictureDriver);
+        // iframe 전환
+        mainFrame2 = await moveMainFrame(lastWindowDriver2, eleMainFrame);
+
+        // html 입력창으로 이동
+        await btnClick(mainFrame2, eleHtmlBtn);
+
+        // html 이미지등록 태그 복사
+        await btnClick(mainFrame2, eleTextarea);
+        arrImgTags.push(
+          await (
+            await mainFrame2.findElement(By.xpath(eleTextarea))
+          ).getAttribute("value")
+        );
+        // 클리어
+        await (await mainFrame2.findElement(By.xpath(eleTextarea))).clear();
+
+        // Editor 입력창으로 이동
+        await btnClick(mainFrame2, eleEditorBtn);
+      }
+    }
+    // 이미지가 2장이상일때
+    if (imgUrl.length > 1) {
+      const eleAttachFileBtn = `//*[@id="se2_tool"]/div[1]/ul[1]/li[1]/button/span[1]`; // 사진첨부 버튼
+      const nextViewBtn = `/html/body/div[2]/div/button`; // 파일업로드 메시지 팝업 X 버튼
+      const eleUploadBtn = `/html/body/div[3]/header/div[2]/button`; // 이미지파일 업로드 버튼
+      // 1. 사진첨부 버튼 클릭
+      await btnClick(selfDriver, eleAttachFileBtn);
+      // 2. 이미지등록화면 진입후 alert 경고창 화면으로 전환
+      let alertDriver = await moveLastTab(selfDriver);
+      const closeNextViewBtn = await (
+        await alertDriver.findElement(By.xpath(nextViewBtn))
+      ).isDisplayed();
+      if (closeNextViewBtn) {
+        await btnClick(alertDriver, nextViewBtn); //  X 버튼 클릭
+      }
+      // 3. chrome windows 이미지등록  화면으로 전환
+      const pictureDriver = await moveLastTab(alertDriver);
+
+      for (let i = 1, len = imgUrl.length; i < len; i++) {
+        // 사진첨부버튼 클릭
+        await clickPictureMultiButton(pictureDriver, imgUrl[i]);
+      }
+      // 5. 이미지 첨부파일 업로드 버튼 클릭
+      await (await pictureDriver.findElement(By.xpath(eleUploadBtn))).click();
+      await pictureDriver.sleep(getRandom(2000));
 
       // chrome탭화면 전환
       const lastWindowDriver2 = await moveLastTab(pictureDriver);
