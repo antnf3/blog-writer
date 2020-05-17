@@ -241,13 +241,12 @@ async function writeNaverPost({
     mainFrame2,
     eleTextarea,
     `${mainImg} ${
-      content.ctnt1 +
-      content.ctnt2 +
-      othersImg.join("") +
-      ((othersImg.length > 0 && "<p><br></p>") || "") +
-      content.ctnt3
+      content.ctnt1 + content.ctnt2 + othersImg.join("") + content.ctnt3
     }`
   );
+
+  // Editor 입력창으로 이동
+  await btnClick(mainFrame2, eleEditorBtn);
 
   const eleSubjectCombo = `//*[@id="directoryArea"]/div/div[1]/div[1]`; // 주제분류 콤보
   const eleSubjectType = `//*[@id="seq21"]`; // 상품리뷰
