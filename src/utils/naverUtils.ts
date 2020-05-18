@@ -9,7 +9,7 @@ import {
   copyClipBoardBeta,
   keyMove,
 } from "./webDriverUtils";
-import { WebDriver, By, Key } from "selenium-webdriver";
+import { WebDriver, By, Key, until } from "selenium-webdriver";
 import { getRandom } from ".";
 
 /**
@@ -195,7 +195,26 @@ async function addMultiImages(
       }
       // 5. 이미지 첨부파일 업로드 버튼 클릭
       await (await pictureDriver.findElement(By.xpath(eleUploadBtn))).click();
-      await pictureDriver.sleep(getRandom(5000));
+      // const imgUploadAlert = `/html/body/div[2]`;
+      // // await pictureDriver.wait(
+      // //   until.elementIsNotVisible(
+      // //     pictureDriver.findElement(By.xpath(imgUploadAlert))
+      // //   ),
+      // //   15000
+      // // ); // 업로드 끝날때까지
+      // let isUploading = 0;
+      // while (isUploading !== -1) {
+      //   await pictureDriver.sleep(getRandom());
+      //   isUploading = await (
+      //     await pictureDriver.findElements(By.xpath(imgUploadAlert))
+      //   ).length;
+
+      //   if (isUploading === -1) {
+      //     break;
+      //   }
+      // }
+
+      await pictureDriver.sleep(getRandom(10000));
 
       // chrome탭화면 전환
       const lastWindowDriver2 = await moveLastTab(pictureDriver);
@@ -219,7 +238,8 @@ async function addMultiImages(
       await btnClick(mainFrame2, eleEditorBtn);
     }
   } catch (err) {
-    throw "error";
+    console.log(err);
+    throw "error::addMultiImages";
   }
   return { mainFrame2, arrImgTags };
 }
