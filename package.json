@@ -1,6 +1,6 @@
 {
   "name": "@antnf3/blog-writer",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "main": "lib/index.js",
   "files": [
     "lib/**/*"
@@ -39,7 +39,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "chromedriver": "^81.0.0",
+    "chromedriver": "^83.0.0",
     "clipboardy": "^2.3.0",
     "selenium-webdriver": "^4.0.0-alpha.7"
   }
