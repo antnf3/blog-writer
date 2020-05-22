@@ -197,7 +197,9 @@ async function writeTistoryPost({
   const blogBtn = `//*[@id="kakaoHead"]/div/div[3]/div/div/div/div[2]/div/div[1]/a[2]`;
   await btnClick(mainDriver, blogBtn);
 
-  await mainDriver.wait(until.titleIs("새로운 글쓰기"), 1000);
+  // await mainDriver.wait(until.titleIs("새로운 글쓰기"), 1000);
+  await mainDriver.sleep(getRandom());
+  await (await mainDriver.switchTo().alert()).dismiss(); // 임시저장글 이어서 쓰기 취소 버튼 클릭
 
   // await basicMode(mainDriver, { imgUrl, subject, content, selectType, tags }); // 기본모드 글쓰기
   await makrdownMode(mainDriver, {
@@ -209,7 +211,8 @@ async function writeTistoryPost({
   }); // MarkDown모드 글쓰기
 
   // 첫번재 공개발행 버튼
-  const saveBtn = `//*[@id="kakaoWrap"]/div[3]/div[2]/button`;
+  const saveBtn = `//*[@id="kakaoWrap"]/div[4]/div[3]/button`;
+
   await postingBtnClick(mainDriver, saveBtn);
 
   await switchToFrame(mainDriver, 0); // 기본모드:1, MarkDown모드: 0

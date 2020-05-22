@@ -28,9 +28,14 @@ function getChromeOptions(site: string) {
   chromeOptions.addArguments("disable-gpu"); // applicable to windows os only
   chromeOptions.addArguments("window-size=1920x1080");
   chromeOptions.addArguments("lang=ko_KR");
+  // chromeOptions.addArguments(
+  //   `user-agent="Mozilla/5.0 (Windows NT 10.0; Android 4.2.1; Microsoft; Lumia 640 XL LTE) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36 Edge/12.10166`
+  // );
+
   chromeOptions.addArguments(
-    `user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36`
+    `user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36`
   );
+
   chromeOptions.addArguments(`user-data-dir=\\user-data\\${site}\\`);
 
   return chromeOptions;

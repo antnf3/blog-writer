@@ -26,9 +26,9 @@ import "dotenv/config";
 // const param = {
 //   id: `${process.env.TISTORY_ID}`,
 //   password: `${process.env.TISTORY_PW}`,
-//   imgUrl: `C:/Users/C14A-080/Desktop/lens-4192777_960_720.jpg`,
+//   imgUrl: [`C:/Users/C14A-080/Desktop/img/1.jpg`],
 //   subject: "제목.",
-//   content: "내용입.",
+//   content: { ctnt1: "내용1", ctnt2: "내용2", ctnt3: "내용3" },
 //   selectType: "6",
 //   tags: `학교,하교,등교`,
 //   site: `tistory`,
