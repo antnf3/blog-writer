@@ -275,6 +275,7 @@ async function setImoticon(
   ];
 
   const arrBase = [0, 1, 2, 3, 4, 5];
+
   for (let i = 0; i < arrReviews.length; i++) {
     const rd = Math.floor(Math.random() * 10) % arrBase.length;
     const rdNum = arrBase.splice(rd, 1)[0];
@@ -301,10 +302,10 @@ async function setImoticon(
     // 1. 스티커(이모티콘) 버튼 클릭
     await btnClick(selfDriver, imoticonBtn);
 
-    await selfDriver.wait(
-      until.elementIsVisible(selfDriver.findElement(By.xpath(imoticonBox))),
-      3000
-    ); // 이모티콘화면이 나올때까지
+    // await selfDriver.wait(
+    //   until.elementIsVisible(selfDriver.findElement(By.xpath(imoticonBox))),
+    //   3000
+    // ); // 이모티콘화면이 나올때까지
     await selfDriver.sleep(getRandom());
     await btnClick(selfDriver, arrImtcMenu[rdNum]); // 이모티콘 메뉴
     await btnClick(selfDriver, arrImtc[rdNum]); // 이모티콘 선택
