@@ -277,9 +277,10 @@ async function setImoticon(
   const arrBase = [0, 1, 2, 3, 4, 5];
 
   for (let i = 0; i < arrReviews.length; i++) {
+    console.log("arrBase.length", arrBase.length);
     const rd = Math.floor(Math.random() * 10) % arrBase.length;
     const rdNum = arrBase.splice(rd, 1)[0];
-
+    console.log(rdNum);
     // 첨부파일 이미지 제일뒤 엔터키2번 아래로 이동
     const actionId = await selfDriver.actions();
     await actionId
