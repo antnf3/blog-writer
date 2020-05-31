@@ -1,6 +1,6 @@
 {
   "name": "@antnf3/blog-writer",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "main": "lib/index.js",
   "files": [
     "lib/**/*"
