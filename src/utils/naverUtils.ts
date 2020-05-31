@@ -292,7 +292,7 @@ async function setImoticon(
       .sendKeys("v")
       .keyUp(Key.CONTROL)
       .perform();
-
+    await selfDriver.sleep(getRandom());
     await keyMove(selfDriver, Key.END);
     await keyMove(selfDriver, Key.ENTER);
 
