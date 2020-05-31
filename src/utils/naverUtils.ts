@@ -303,7 +303,7 @@ async function setImoticon(
 
     await selfDriver.wait(
       until.elementIsVisible(selfDriver.findElement(By.xpath(imoticonBox))),
-      1000
+      3000
     ); // 이모티콘화면이 나올때까지
     await selfDriver.sleep(getRandom());
     await btnClick(selfDriver, arrImtcMenu[rdNum]); // 이모티콘 메뉴
