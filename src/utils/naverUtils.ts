@@ -293,6 +293,7 @@ async function setImoticon(
       .keyUp(Key.CONTROL)
       .perform();
 
+    await keyMove(selfDriver, Key.END);
     await keyMove(selfDriver, Key.ENTER);
 
     // 가운데 정렬
