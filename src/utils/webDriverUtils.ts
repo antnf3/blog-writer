@@ -104,12 +104,17 @@ async function copyClipBoardNOClear(
   await write(val);
   await btnClick(selfDriver, element);
   // await (await selfDriver.findElement(By.xpath(element))).clear();
-  await keyMove_start(selfDriver, Key.ARROW_DOWN);
-  await selfDriver.sleep(getRandom(5000));
-  await keyMove_end(selfDriver, Key.ARROW_DOWN);
+  const actionId = await selfDriver.actions();
+  await actionId
+    .keyDown(Key.CONTROL)
+    .keyDown(Key.ARROW_DOWN)
+    .keyUp(Key.ARROW_DOWN)
+    .keyUp(Key.CONTROL)
+    .perform();
+
   await keyMove(selfDriver, Key.END);
   // await btnClick(selfDriver, element);
-  const actionId = await selfDriver.actions();
+
   await actionId
     .keyDown(Key.CONTROL)
     .sendKeys("v")
@@ -181,7 +186,7 @@ async function btnClick(selfDriver: WebDriver, element: string) {
     await selfDriver.sleep(getRandom());
   } catch (err) {
     console.log(err);
-    // await logOut(selfDriver);
+    await logOut(selfDriver);
     throw "btnClick err";
   }
 }

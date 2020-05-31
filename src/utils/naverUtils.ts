@@ -247,7 +247,13 @@ async function addMultiImages(
   return { mainFrame2, arrImgTags };
 }
 
-async function setImoticon(selfDriver: WebDriver, arrReviews: string[]) {
+async function setImoticon(
+  selfDriver: WebDriver,
+  arrReviews: string[],
+  eleHtmlBtn: string,
+  eleEditorBtn: string,
+  eleTextarea: string
+) {
   const imoticonBtn = `//*[@id="se2_tool"]/div[2]/ul[7]/li/button`;
   const imoticonBox = `//*[@id="se2_tool"]/div[2]/ul[7]/li/div`;
   const centerBtn = `//*[@id="se2_tool"]/div[2]/ul[3]/li[2]/button`; // 가운데 정렬
@@ -273,7 +279,22 @@ async function setImoticon(selfDriver: WebDriver, arrReviews: string[]) {
     const rd = Math.floor(Math.random() * 10) % arrBase.length;
     const rdNum = arrBase.splice(rd, 1)[0];
 
+    // 첨부파일 이미지 제일뒤 엔터키2번 아래로 이동
+    const actionId = await selfDriver.actions();
+    await actionId
+      .keyDown(Key.CONTROL)
+      .sendKeys("a")
+      .keyUp(Key.CONTROL)
+      .keyDown(Key.CONTROL)
+      .sendKeys("x")
+      .keyUp(Key.CONTROL)
+      .keyDown(Key.CONTROL)
+      .sendKeys("v")
+      .keyUp(Key.CONTROL)
+      .perform();
+
     await keyMove(selfDriver, Key.ENTER);
+
     // 가운데 정렬
     await btnClick(selfDriver, centerBtn);
     // 1. 스티커(이모티콘) 버튼 클릭
@@ -286,6 +307,13 @@ async function setImoticon(selfDriver: WebDriver, arrReviews: string[]) {
     await selfDriver.sleep(getRandom());
     await btnClick(selfDriver, arrImtcMenu[rdNum]); // 이모티콘 메뉴
     await btnClick(selfDriver, arrImtc[rdNum]); // 이모티콘 선택
+
+    // html 입력창으로 이동
+    await btnClick(selfDriver, eleHtmlBtn);
+
+    await copyClipBoardNOClear(selfDriver, eleTextarea, `${arrReviews[i]}`);
+    // Editor 입력창으로 이동
+    await btnClick(selfDriver, eleEditorBtn);
   }
 }
 /**
@@ -380,13 +408,14 @@ async function writeNaverPost({
   // Editor 입력창으로 이동
   await btnClick(mainFrame2, eleEditorBtn);
 
-  await keyMove_start(mainFrame2, Key.ARROW_DOWN);
-  await mainFrame2.sleep(getRandom(5000));
-  await keyMove_end(mainFrame2, Key.ARROW_DOWN);
-  await keyMove(mainFrame2, Key.END);
-
   // 이모티콘
-  await setImoticon(mainFrame2, content.reviews);
+  await setImoticon(
+    mainFrame2,
+    content.reviews,
+    eleHtmlBtn,
+    eleEditorBtn,
+    eleTextarea
+  );
 
   // html 입력창으로 이동
   await btnClick(mainFrame2, eleHtmlBtn);
