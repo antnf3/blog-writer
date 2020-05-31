@@ -93,6 +93,33 @@ async function copyClipBoard(
 }
 
 /**
+ * 입력창에 문자열을 클립보드에 복사하여 붙여넣는다.
+ */
+async function copyClipBoardNOClear(
+  selfDriver: WebDriver,
+  element: string,
+  val: string
+) {
+  //클립보드 복사
+  await write(val);
+  await btnClick(selfDriver, element);
+  // await (await selfDriver.findElement(By.xpath(element))).clear();
+  await keyMove_start(selfDriver, Key.ARROW_DOWN);
+  await selfDriver.sleep(getRandom(5000));
+  await keyMove_end(selfDriver, Key.ARROW_DOWN);
+  await keyMove(selfDriver, Key.END);
+  // await btnClick(selfDriver, element);
+  const actionId = await selfDriver.actions();
+  await actionId
+    .keyDown(Key.CONTROL)
+    .sendKeys("v")
+    .keyUp(Key.CONTROL)
+    .perform();
+
+  await selfDriver.sleep(getRandom());
+}
+
+/**
  * key 코드 입력
  */
 async function keyMove(selfDriver: WebDriver, keyValue: string) {
@@ -101,6 +128,26 @@ async function keyMove(selfDriver: WebDriver, keyValue: string) {
 
   await selfDriver.sleep(getRandom());
 }
+
+/**
+ * key 코드 입력
+ */
+async function keyMove_start(selfDriver: WebDriver, keyValue: string) {
+  const actionId = await selfDriver.actions();
+  await actionId.keyDown(keyValue).perform();
+
+  await selfDriver.sleep(getRandom());
+}
+/**
+ * key 코드 입력
+ */
+async function keyMove_end(selfDriver: WebDriver, keyValue: string) {
+  const actionId = await selfDriver.actions();
+  await actionId.keyUp(keyValue).perform();
+
+  await selfDriver.sleep(getRandom());
+}
+
 /**
  * 클립보드 복사  beta 편집기
  */
@@ -134,7 +181,7 @@ async function btnClick(selfDriver: WebDriver, element: string) {
     await selfDriver.sleep(getRandom());
   } catch (err) {
     console.log(err);
-    await logOut(selfDriver);
+    // await logOut(selfDriver);
     throw "btnClick err";
   }
 }
@@ -227,12 +274,15 @@ export {
   getDrive,
   getLoginPage,
   copyClipBoard,
+  copyClipBoardNOClear,
   btnClick,
   moveMainFrame,
   selectBox,
   logOut,
   copyClipBoardBeta,
   keyMove,
+  keyMove_start,
+  keyMove_end,
   switchToDefault,
   switchToParent,
   switchToFrame,

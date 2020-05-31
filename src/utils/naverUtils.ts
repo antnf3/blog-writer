@@ -8,6 +8,9 @@ import {
   selectBox,
   copyClipBoardBeta,
   keyMove,
+  keyMove_start,
+  keyMove_end,
+  copyClipBoardNOClear,
 } from "./webDriverUtils";
 import { WebDriver, By, Key, until } from "selenium-webdriver";
 import { getRandom } from ".";
@@ -134,7 +137,7 @@ async function clickPictureMultiButton(selfDriver: WebDriver, imgUrl: string) {
 }
 
 /**
- *
+ * 멀티 사진 등록
  */
 async function addMultiImages(
   selfDriver: WebDriver,
@@ -243,6 +246,48 @@ async function addMultiImages(
   }
   return { mainFrame2, arrImgTags };
 }
+
+async function setImoticon(selfDriver: WebDriver, arrReviews: string[]) {
+  const imoticonBtn = `//*[@id="se2_tool"]/div[2]/ul[7]/li/button`;
+  const imoticonBox = `//*[@id="se2_tool"]/div[2]/ul[7]/li/div`;
+  const centerBtn = `//*[@id="se2_tool"]/div[2]/ul[3]/li[2]/button`; // 가운데 정렬
+  const arrImtcMenu = [
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[1]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[2]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[3]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[4]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[5]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[6]/button`,
+  ];
+  const arrImtc = [
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[1]/div/ul/li[1]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[2]/div/ul/li[1]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[3]/div/ul/li[1]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[4]/div/ul/li[1]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[5]/div/ul/li[1]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[6]/div/ul/li[1]/button`,
+  ];
+
+  const arrBase = [0, 1, 2, 3, 4, 5];
+  for (let i = 0; i < arrReviews.length; i++) {
+    const rd = Math.floor(Math.random() * 10) % arrBase.length;
+    const rdNum = arrBase.splice(rd, 1)[0];
+
+    await keyMove(selfDriver, Key.ENTER);
+    // 가운데 정렬
+    await btnClick(selfDriver, centerBtn);
+    // 1. 스티커(이모티콘) 버튼 클릭
+    await btnClick(selfDriver, imoticonBtn);
+
+    await selfDriver.wait(
+      until.elementIsVisible(selfDriver.findElement(By.xpath(imoticonBox))),
+      1000
+    ); // 이모티콘화면이 나올때까지
+    await selfDriver.sleep(getRandom());
+    await btnClick(selfDriver, arrImtcMenu[rdNum]); // 이모티콘 메뉴
+    await btnClick(selfDriver, arrImtc[rdNum]); // 이모티콘 선택
+  }
+}
 /**
  * 내용 속성
  */
@@ -250,6 +295,8 @@ interface contentProps {
   ctnt1: string;
   ctnt2: string;
   ctnt3: string;
+  reviews: string[];
+  ctnt4: string;
 }
 interface WriteNaverPostProps {
   id: string;
@@ -332,6 +379,19 @@ async function writeNaverPost({
 
   // Editor 입력창으로 이동
   await btnClick(mainFrame2, eleEditorBtn);
+
+  await keyMove_start(mainFrame2, Key.ARROW_DOWN);
+  await mainFrame2.sleep(getRandom(5000));
+  await keyMove_end(mainFrame2, Key.ARROW_DOWN);
+  await keyMove(mainFrame2, Key.END);
+
+  // 이모티콘
+  await setImoticon(mainFrame2, content.reviews);
+
+  // html 입력창으로 이동
+  await btnClick(mainFrame2, eleHtmlBtn);
+
+  await copyClipBoardNOClear(mainFrame2, eleTextarea, `${content.ctnt4}`);
 
   const eleSubjectCombo = `//*[@id="directoryArea"]/div/div[1]/div[1]`; // 주제분류 콤보
   const eleSubjectType = `//*[@id="seq21"]`; // 상품리뷰
