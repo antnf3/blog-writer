@@ -154,6 +154,19 @@ async function keyMove_end(selfDriver: WebDriver, keyValue: string) {
 }
 
 /**
+ * control 조합키 이벤트 발생
+ */
+async function setControlKey(selfDriver: WebDriver, sendKey: string) {
+  const actionId = await selfDriver.actions();
+  await actionId
+    .keyDown(Key.CONTROL)
+    .sendKeys(sendKey)
+    .keyUp(Key.CONTROL)
+    .perform();
+
+  await selfDriver.sleep(getRandom());
+}
+/**
  * 클립보드 복사  beta 편집기
  */
 async function copyClipBoardBeta(
@@ -291,4 +304,5 @@ export {
   switchToDefault,
   switchToParent,
   switchToFrame,
+  setControlKey,
 };

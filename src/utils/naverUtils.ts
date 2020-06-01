@@ -11,9 +11,11 @@ import {
   keyMove_start,
   keyMove_end,
   copyClipBoardNOClear,
+  setControlKey,
 } from "./webDriverUtils";
 import { WebDriver, By, Key, until } from "selenium-webdriver";
 import { getRandom } from ".";
+import { write } from "clipboardy";
 
 /**
  * 네이버 로그인하기
@@ -247,6 +249,9 @@ async function addMultiImages(
   return { mainFrame2, arrImgTags };
 }
 
+/**
+ * 리뷰 사이에 이모티콘 등록 ( 미사용 )
+ */
 async function setImoticon(
   selfDriver: WebDriver,
   arrReviews: string[],
@@ -319,6 +324,72 @@ async function setImoticon(
     await btnClick(selfDriver, eleEditorBtn);
   }
 }
+
+/**
+ * 이모티콘 선택 함수
+ */
+async function selectImoticon(selfDriver: WebDriver, rdNum: number) {
+  const imoticonBtn = `//*[@id="se2_tool"]/div[2]/ul[7]/li/button`;
+  const imoticonBox = `//*[@id="se2_tool"]/div[2]/ul[7]/li/div`;
+  const centerBtn = `//*[@id="se2_tool"]/div[2]/ul[3]/li[2]/button`; // 가운데 정렬
+  const arrImtcMenu = [
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[1]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[2]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[3]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[4]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[5]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[6]/button`,
+  ];
+  const arrImtc = [
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[1]/div/ul/li[1]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[2]/div/ul/li[1]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[3]/div/ul/li[1]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[4]/div/ul/li[1]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[5]/div/ul/li[1]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[6]/div/ul/li[1]/button`,
+  ];
+
+  // 가운데 정렬
+  await btnClick(selfDriver, centerBtn);
+
+  // 1. 스티커(이모티콘) 버튼 클릭
+  await btnClick(selfDriver, imoticonBtn);
+
+  await selfDriver.sleep(getRandom());
+  await btnClick(selfDriver, arrImtcMenu[rdNum]); // 이모티콘 메뉴
+  await selfDriver.sleep(getRandom());
+  await btnClick(selfDriver, arrImtc[rdNum]); // 이모티콘 선택
+  await selfDriver.sleep(getRandom());
+}
+/**
+ * 이모티콘 복사 V2
+ */
+async function setImoticon_V2(selfDriver: WebDriver, reviewCnt: number) {
+  const nextSearchBtn = `//*[@id="se2_tool"]/div[2]/ul[6]/li[5]/div/div/div/div[1]/p/button[1]`;
+  const closeSearchBtn = `//*[@id="se2_tool"]/div[2]/ul[6]/li[5]/div/div/div/button[2]`;
+
+  const arrBase = [0, 1, 2, 3, 4, 5];
+
+  for (let i = 0; i < reviewCnt; i++) {
+    const rd = Math.floor(Math.random() * 10) % arrBase.length;
+    const rdNum = arrBase.splice(rd, 1)[0];
+
+    await write(`$review${i}$`);
+    await selfDriver.sleep(getRandom());
+    await setControlKey(selfDriver, "f");
+    await setControlKey(selfDriver, "v");
+    // 다음찾기 버튼 클릭
+    await btnClick(selfDriver, nextSearchBtn);
+
+    await keyMove(selfDriver, Key.ENTER);
+    await keyMove(selfDriver, Key.ENTER);
+    await keyMove(selfDriver, Key.ARROW_UP);
+    // 검색창 닫기 버튼 클릭
+    await btnClick(selfDriver, closeSearchBtn);
+
+    await selectImoticon(selfDriver, rdNum);
+  }
+}
 /**
  * 내용 속성
  */
@@ -326,8 +397,7 @@ interface contentProps {
   ctnt1: string;
   ctnt2: string;
   ctnt3: string;
-  reviews: string[];
-  ctnt4: string;
+  reviewCnt: number;
 }
 interface WriteNaverPostProps {
   id: string;
@@ -340,7 +410,7 @@ interface WriteNaverPostProps {
   site: string;
 }
 /**
- * 네이저 자동 블로그 포스팅
+ * 네이버 자동 블로그 포스팅
  */
 async function writeNaverPost({
   id,
@@ -411,19 +481,22 @@ async function writeNaverPost({
   // Editor 입력창으로 이동
   await btnClick(mainFrame2, eleEditorBtn);
 
+  // // 이모티콘
+  // await setImoticon(
+  //   mainFrame2,
+  //   content.reviews,
+  //   eleHtmlBtn,
+  //   eleEditorBtn,
+  //   eleTextarea
+  // );
+
   // 이모티콘
-  await setImoticon(
-    mainFrame2,
-    content.reviews,
-    eleHtmlBtn,
-    eleEditorBtn,
-    eleTextarea
-  );
+  await setImoticon_V2(mainFrame2, content.reviewCnt);
 
   // html 입력창으로 이동
-  await btnClick(mainFrame2, eleHtmlBtn);
+  // await btnClick(mainFrame2, eleHtmlBtn);
 
-  await copyClipBoardNOClear(mainFrame2, eleTextarea, `${content.ctnt4}`);
+  // await copyClipBoardNOClear(mainFrame2, eleTextarea, `${content.ctnt4}`);
 
   const eleSubjectCombo = `//*[@id="directoryArea"]/div/div[1]/div[1]`; // 주제분류 콤보
   const eleSubjectType = `//*[@id="seq21"]`; // 상품리뷰
