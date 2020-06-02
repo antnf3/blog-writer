@@ -328,7 +328,11 @@ async function setImoticon(
 /**
  * 이모티콘 선택 함수
  */
-async function selectImoticon(selfDriver: WebDriver, rdNum: number) {
+async function selectImoticon(
+  selfDriver: WebDriver,
+  rdNum: number,
+  imoticonUnit: number
+) {
   const imoticonBtn = `//*[@id="se2_tool"]/div[2]/ul[7]/li/button`;
   const imoticonBox = `//*[@id="se2_tool"]/div[2]/ul[7]/li/div`;
   const centerBtn = `//*[@id="se2_tool"]/div[2]/ul[3]/li[2]/button`; // 가운데 정렬
@@ -342,11 +346,40 @@ async function selectImoticon(selfDriver: WebDriver, rdNum: number) {
   ];
   const arrImtc = [
     `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[1]/div/ul/li[1]/button`,
+    '//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[1]/div/ul/li[2]/button',
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[1]/div/ul/li[3]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[1]/div/ul/li[4]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[1]/div/ul/li[11]/button`,
+
     `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[2]/div/ul/li[1]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[2]/div/ul/li[2]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[2]/div/ul/li[3]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[2]/div/ul/li[5]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[2]/div/ul/li[11]/button`,
+
     `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[3]/div/ul/li[1]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[3]/div/ul/li[3]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[3]/div/ul/li[4]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[3]/div/ul/li[7]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[3]/div/ul/li[12]/button`,
+
     `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[4]/div/ul/li[1]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[4]/div/ul/li[2]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[4]/div/ul/li[8]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[4]/div/ul/li[31]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[4]/div/ul/li[44]/button`,
+
     `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[5]/div/ul/li[1]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[5]/div/ul/li[2]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[5]/div/ul/li[8]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[5]/div/ul/li[18]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[5]/div/ul/li[68]/button`,
+
     `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[6]/div/ul/li[1]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[6]/div/ul/li[7]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[6]/div/ul/li[18]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[6]/div/ul/li[34]/button`,
+    `//*[@id="se2_tool"]/div[2]/ul[7]/li/div/div/div/ul/li[6]/div/ul/li[22]/button`,
   ];
 
   // 가운데 정렬
@@ -358,7 +391,8 @@ async function selectImoticon(selfDriver: WebDriver, rdNum: number) {
   await selfDriver.sleep(getRandom());
   await btnClick(selfDriver, arrImtcMenu[rdNum]); // 이모티콘 메뉴
   await selfDriver.sleep(getRandom());
-  await btnClick(selfDriver, arrImtc[rdNum]); // 이모티콘 선택
+  const imoticon = rdNum * 5 + imoticonUnit;
+  await btnClick(selfDriver, arrImtc[imoticon]); // 이모티콘 선택
   await selfDriver.sleep(getRandom());
 }
 /**
@@ -372,6 +406,7 @@ async function setImoticon_V2(selfDriver: WebDriver, reviewCnt: number) {
 
   for (let i = 0; i < reviewCnt; i++) {
     const rd = Math.floor(Math.random() * 10) % arrBase.length;
+    const imoticonUnit = Math.floor(Math.random() * 5);
     const rdNum = arrBase.splice(rd, 1)[0];
 
     await write(`$review${i}$`);
@@ -387,9 +422,39 @@ async function setImoticon_V2(selfDriver: WebDriver, reviewCnt: number) {
     // 검색창 닫기 버튼 클릭
     await btnClick(selfDriver, closeSearchBtn);
 
-    await selectImoticon(selfDriver, rdNum);
+    await selectImoticon(selfDriver, rdNum, imoticonUnit);
   }
 }
+
+/**
+ * 이모티콘 복사 V3
+ */
+async function setImoticon_V3(selfDriver: WebDriver, target: string) {
+  const nextSearchBtn = `//*[@id="se2_tool"]/div[2]/ul[6]/li[5]/div/div/div/div[1]/p/button[1]`;
+  const closeSearchBtn = `//*[@id="se2_tool"]/div[2]/ul[6]/li[5]/div/div/div/button[2]`;
+
+  const arrBase = [0, 1, 2, 3, 4, 5];
+
+  const rd = Math.floor(Math.random() * 10) % arrBase.length;
+  const imoticonUnit = Math.floor(Math.random() * 5);
+  const rdNum = arrBase.splice(rd, 1)[0];
+
+  await write(target);
+  await selfDriver.sleep(getRandom());
+  await setControlKey(selfDriver, "f");
+  await setControlKey(selfDriver, "v");
+  // 다음찾기 버튼 클릭
+  await btnClick(selfDriver, nextSearchBtn);
+
+  await keyMove(selfDriver, Key.ENTER);
+  await keyMove(selfDriver, Key.ENTER);
+  await keyMove(selfDriver, Key.ARROW_UP);
+  // 검색창 닫기 버튼 클릭
+  await btnClick(selfDriver, closeSearchBtn);
+
+  await selectImoticon(selfDriver, rdNum, imoticonUnit);
+}
+
 /**
  * 내용 속성
  */
@@ -490,6 +555,8 @@ async function writeNaverPost({
   //   eleTextarea
   // );
 
+  // 이모티콘
+  await setImoticon_V3(mainFrame2, `$rocket_delivery$`);
   // 이모티콘
   await setImoticon_V2(mainFrame2, content.reviewCnt);
 
